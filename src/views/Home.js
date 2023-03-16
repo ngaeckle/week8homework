@@ -1,25 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Details from "../components/CarDetails";
+import { DataContext } from "../contexts/DataProvider";
 
 
 export default function Home(){
-    const [carDetails, setCarDetails] = useState([])
-    const [status, setStatus] = useState({})
-    useEffect(() => {
-    async function getDetails(){
-            const response = await fetch(`https://my-json-server.typicode.com/Llang8/cars-api/cars`)
-            setStatus(response.status)
-            console.log("status: " + status)
-            const data = await response.json()
-            setCarDetails(data)        
-        }
-        getDetails()
-    }, [status])
+   const {cars} = useContext(DataContext)
 
     return (
         <div>
             <h1>Home</h1>
-            {carDetails.map((car) => <Details car={car} key={car.id}/>)}
+            {cars.map((car) => <Details car={car} key={car.id}/>)}
         </div>
     )
 }

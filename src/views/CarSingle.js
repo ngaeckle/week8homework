@@ -1,36 +1,37 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { useParams } from "react-router-dom"
 import Details from "../components/CarDetails"
+import { DataContext } from "../contexts/DataProvider"
 
 export default function CarSingle(){
     const {id} = useParams()
     const [CarDetails, setCarDetails] = useState({})
-    const [status, setStatus] = useState({})
+    const [Error, setError] = useState(false)
+    const {getCar} = useContext(DataContext)
     useEffect(() => {
-    async function getDetails(){
-            const response = await fetch(`https://my-json-server.typicode.com/Llang8/cars-api/cars/${id}`)
-            setStatus(response.status)
-            console.log("status: " + status)
-            const data = await response.json()
-            setCarDetails(data)        
+        async function handleLoad(){
+            try {
+                const data = await getCar(id)
+                setCarDetails(data)
+            } catch(err){
+                setError(true)
+            }
         }
-        getDetails()
-    }, [status])
+        handleLoad()
+    }, [])
 
     return (
         <div>
             {
-                (status == 200) ?
+                (!Error) ?
                 <div>
                 <h1>Car #{id}</h1>
                 <Details car={CarDetails} hideLink={true}/>
                 </div>
-                : (typeof status == 'number') ?
-                <div>
-                    <h1>Error Status: {status}</h1>
-                </div>
                 :
-                <></>
+                <div>
+                    <h1>Error</h1>
+                </div>
             }
         </div>
     )
