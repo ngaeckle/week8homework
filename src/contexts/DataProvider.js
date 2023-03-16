@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext } from "react";
-import {getFirestore, getDocs, collection, doc, getDoc} from '@firebase/firestore'
+import {getFirestore, getDocs, collection, doc, getDoc, addDoc} from '@firebase/firestore'
 
 export const DataContext = createContext()
 

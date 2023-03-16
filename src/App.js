@@ -5,8 +5,11 @@ import Home from './views/Home'
 import Inventory from './views/Inventory'
 import Profile from './views/Profile'
 import CarSingle from './views/CarSingle';
+import { AuthContext } from './contexts/AuthProvider';
+import { useState, useContext } from 'react'
 
 function App() {
+  const {login, user, logout} = useContext(AuthContext)
   return (
     <BrowserRouter>
       <nav>
@@ -16,6 +19,17 @@ function App() {
           <li><Link to='/Profile'>Profile</Link></li>
         </ul>
       </nav>
+      <div>
+        {
+          (!user.loggedIn) ?
+          <button onClick={login}>Login</button> 
+          :
+          <div>
+          <button onClick={logout}>Logout</button>
+          <p>Current User: {user.displayName}</p>
+          </div>
+        }
+      </div>
       <Routes>
         <Route path='/' element={<Home />}/>
         <Route path='/Profile' element={<Profile />}/>
